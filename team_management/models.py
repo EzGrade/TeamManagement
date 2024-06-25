@@ -5,7 +5,7 @@ class UserProfile(models.Model):
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
     email = models.EmailField(unique=True)
-    team = models.OneToOneField("Team", on_delete=models.SET_NULL, null=True, related_name='user_profile')
+    team = models.ForeignKey('Team', on_delete=models.SET_NULL, null=True, related_name='users')
 
     @property
     def full_name(self):
@@ -20,7 +20,7 @@ class Team(models.Model):
 
     @property
     def users(self):
-        return UserProfile.objects.filter(team=self)
+        return self.user.all()
 
     def __str__(self):
         return self.name
