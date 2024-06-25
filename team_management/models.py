@@ -5,7 +5,7 @@ class UserProfile(models.Model):
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
     email = models.EmailField()
-    team = models.OneToOneField('Team', on_delete=models.SET_NULL, null=True)
+    team = models.OneToOneField("Team", on_delete=models.SET_NULL, null=True, related_name='user_profile')
 
     @property
     def full_name(self):
@@ -17,7 +17,7 @@ class UserProfile(models.Model):
 
 class Team(models.Model):
     name = models.CharField(max_length=100)
-    users = models.ManyToManyField(UserProfile)
+    users = models.ManyToManyField(UserProfile, related_name='teams')
 
     def __str__(self):
         return self.name
