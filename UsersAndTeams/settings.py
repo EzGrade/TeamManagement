@@ -12,9 +12,6 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 
 from pathlib import Path
 import os
-import dotenv
-
-dotenv.load_dotenv(dotenv.find_dotenv())
 
 from django.core.exceptions import ImproperlyConfigured
 
