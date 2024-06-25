@@ -12,6 +12,9 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 
 from pathlib import Path
 import os
+import dotenv
+
+dotenv.load_dotenv(dotenv.find_dotenv())
 
 from django.core.exceptions import ImproperlyConfigured
 
@@ -62,7 +65,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'users_and_teams.urls'
+ROOT_URLCONF = 'UsersAndTeams.urls'
 
 TEMPLATES = [
     {
@@ -81,7 +84,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'users_and_teams.wsgi.application'
+WSGI_APPLICATION = 'UsersAndTeams.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases

@@ -11,6 +11,6 @@ import os
 
 from django.core.wsgi import get_wsgi_application
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'users_and_teams.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'UsersAndTeams.settings')
 
 application = get_wsgi_application()

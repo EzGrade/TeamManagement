@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   web:
     build: .
@@ -13,6 +11,18 @@ services:
     depends_on:
       - db
       - migration
+  test:
+    build: .
+    command: python manage.py test
+    volumes:
+      - .:/app
+    env_file:
+      - .env
+    depends_on:
+      - db
+      - migration
+    restart: on-failure
+
   migration:
     build: .
     command: python manage.py migrate

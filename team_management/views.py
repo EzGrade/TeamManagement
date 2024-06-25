@@ -16,7 +16,6 @@ class UserView(ViewSet):
 
     @swagger_auto_schema(
         request_body=UserSerializer,
-        method='post',
         responses={
             201: UserSerializer,
             400: 'Bad Request'
@@ -58,7 +57,7 @@ class TeamView(ViewSet):
             400: 'Bad Request'
         }
     )
-    def update(self, request):
+    def put(self, request):
         serializer = TeamSerializer(data=request.data)
         if serializer.is_valid():
             team_pk = request.data.pop('pk')

@@ -18,5 +18,9 @@ class UserProfile(models.Model):
 class Team(models.Model):
     name = models.CharField(max_length=100)
 
+    @property
+    def users(self):
+        return UserProfile.objects.filter(team=self)
+
     def __str__(self):
         return self.name

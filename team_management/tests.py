@@ -21,7 +21,7 @@ class TestUserProfile(TestCase):
     def test_get_user(self):
         response = self.client.post('/api/user/', self.user_data)
         user_id = response.data['pk']
-        response = self.client.get(f'/api/user/{user_id}')
+        response = self.client.get(f'/api/user/{user_id}/')
         self.assertEqual(response.status_code, 200)
 
 
@@ -44,7 +44,7 @@ class TestTeam(TestCase):
 
     def test_create_team_with_users(self):
         self.team_data['users'] = [self.user['pk']]
-        response = self.client.post('/api/team/', self.team_data)
+        response = self.client.post('/api/team/', self.team_data, content_type='application/json')
         self.assertEqual(response.status_code, 201)
         self.assertIn(self.user, response.data['users'])
 
@@ -56,7 +56,7 @@ class TestTeam(TestCase):
     def test_get_team(self):
         response = self.client.post('/api/team/', self.team_data)
         team_id = response.data['pk']
-        response = self.client.get(f'/api/team/{team_id}')
+        response = self.client.get(f'/api/team/{team_id}/')
         self.assertEqual(response.status_code, 200)
 
     def test_update_team(self):
