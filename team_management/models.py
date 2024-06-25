@@ -4,7 +4,7 @@ from django.db import models
 class UserProfile(models.Model):
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
-    email = models.EmailField()
+    email = models.EmailField(unique=True)
     team = models.OneToOneField("Team", on_delete=models.SET_NULL, null=True, related_name='user_profile')
 
     @property
