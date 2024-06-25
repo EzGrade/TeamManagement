@@ -12,4 +12,3 @@ class UserProfile(admin.ModelAdmin):
 @admin.register(Team)
 class Team(admin.ModelAdmin):
     list_display = ['pk', 'name']
-    filter_horizontal = ['users']
