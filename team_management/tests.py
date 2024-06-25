@@ -78,6 +78,15 @@ class TestTeam(TestCase):
         self.assertEqual(response.status_code, 201)
         self.assertEqual(response.data['users'], [])
 
+    def test_add_user_to_team(self):
+        response = self.client.post('/api/team/', self.team_data)
+        team_id = response.data['pk']
+        self.team_data['pk'] = team_id
+        self.team_data['users'] = [self.user['pk']]
+        response = self.client.put('/api/team/', self.team_data, content_type='application/json')
+        self.assertEqual(response.status_code, 201)
+        self.assertIn(self.user, response.data['users'])
+
 
 if __name__ == "__main__":
     import unittest
