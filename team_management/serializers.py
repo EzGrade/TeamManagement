@@ -2,20 +2,12 @@ from rest_framework import serializers
 from .models import UserProfile, Team
 
 
-class UserSerializer(serializers.Serializer):
-    first_name = serializers.CharField()
-    last_name = serializers.CharField()
-    email = serializers.EmailField()
-    team = serializers.PrimaryKeyRelatedField(queryset=Team.objects.all(), required=False)
-
+class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserProfile
         fields = ['pk', 'first_name', 'last_name', 'email']
 
     def create(self, validated_data):
-        if UserProfile.objects.filter(email=validated_data['email']).exists():
-            raise serializers.ValidationError('User with this email already exists')
-
         return UserProfile.objects.create(**validated_data)
 
     def to_representation(self, instance: UserProfile):
@@ -27,15 +19,10 @@ class UserSerializer(serializers.Serializer):
         }
 
 
-class TeamSerializer(serializers.Serializer):
-    pk = serializers.IntegerField(required=False)
-    name = serializers.CharField()
-    users = serializers.ListField(child=serializers.PrimaryKeyRelatedField(queryset=UserProfile.objects.all()),
-                                  required=False)
-
+class TeamSerializer(serializers.ModelSerializer):
     class Meta:
         model = Team
-        fields = ['pk', 'name', 'users']
+        fields = ['pk', 'name']
 
     def create(self, validated_data):
         if Team.objects.filter(name=validated_data['name']).exists():
@@ -63,8 +50,9 @@ class TeamSerializer(serializers.Serializer):
         return instance
 
     def to_representation(self, instance: Team):
+        users = UserProfile.objects.filter(team=instance)
         return {
             "pk": instance.pk,
             "name": instance.name,
-            "users": UserSerializer(instance.users.all(), many=True).data
+            "users": UserSerializer(users.all(), many=True).data
         }
