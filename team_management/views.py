@@ -1,27 +1,28 @@
+from django.shortcuts import get_object_or_404
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework.response import Response
-from rest_framework.views import APIView
+from rest_framework.viewsets import ViewSet
 
 from team_management.models import Team, UserProfile
 from team_management.serializers import UserSerializer, TeamSerializer
 
 
-class GetUserView(APIView):
+class UserView(ViewSet):
+
     def get(self, request, pk: int):
-        user = UserProfile.objects.get(pk=pk)
+        user = get_object_or_404(UserProfile, pk=pk)
         serializer = UserSerializer(user)
         return Response(serializer.data)
 
-
-class UserView(APIView):
     @swagger_auto_schema(
         request_body=UserSerializer,
+        method='post',
         responses={
             201: UserSerializer,
             400: 'Bad Request'
         }
     )
-    def post(self, request):
+    def create(self, request):
         serializer = UserSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
@@ -29,14 +30,12 @@ class UserView(APIView):
         return Response(serializer.errors, status=400)
 
 
-class GetTeamView(APIView):
+class TeamView(ViewSet):
+
     def get(self, request, pk: int):
-        team = Team.objects.get(pk=pk)
+        team = get_object_or_404(Team, pk=pk)
         serializer = TeamSerializer(team)
         return Response(serializer.data)
-
-
-class TeamView(APIView):
 
     @swagger_auto_schema(
         request_body=TeamSerializer,
@@ -45,7 +44,7 @@ class TeamView(APIView):
             400: 'Bad Request'
         }
     )
-    def post(self, request):
+    def create(self, request):
         serializer = TeamSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
@@ -59,7 +58,7 @@ class TeamView(APIView):
             400: 'Bad Request'
         }
     )
-    def put(self, request):
+    def update(self, request):
         serializer = TeamSerializer(data=request.data)
         if serializer.is_valid():
             team_pk = request.data.pop('pk')

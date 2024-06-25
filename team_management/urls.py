@@ -1,9 +1,10 @@
 from django.urls import path
-from .views import UserView, TeamView, GetUserView, GetTeamView
+from .views import UserView, TeamView
 
 urlpatterns = [
-    path('user/<int:pk>', GetUserView.as_view()),
-    path('user/', UserView.as_view()),
-    path('team/<int:pk>', GetTeamView.as_view()),
-    path('team/', TeamView.as_view())
+    path('user/<int:pk>/', UserView.as_view({'get': 'get'})),
+    path('user/', UserView.as_view({'post': 'create'})),
+    path('team/<int:pk>/', TeamView.as_view({'get': 'get'})),
+    path('team/', TeamView.as_view({'post': 'create'})),
+    path('team/', TeamView.as_view({'put': 'update'})),
 ]
