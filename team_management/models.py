@@ -17,7 +17,6 @@ class UserProfile(models.Model):
 
 class Team(models.Model):
     name = models.CharField(max_length=100)
-    users = models.ManyToManyField(UserProfile, related_name='teams')
 
     def __str__(self):
         return self.name
