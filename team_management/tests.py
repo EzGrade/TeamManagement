@@ -49,7 +49,7 @@ class TestTeam(TestCase):
         self.assertIn(self.user, response.data['users'])
 
     def test_create_team_with_existing_name(self):
-        self.client.post('/api/team/', self.team_data)
+        response_1 = self.client.post('/api/team/', self.team_data)
         response = self.client.post('/api/team/', self.team_data)
         self.assertEqual(response.status_code, 400)
 
