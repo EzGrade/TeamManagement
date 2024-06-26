@@ -60,9 +60,10 @@ class TeamView(ViewSet):
     def put(self, request):
         serializer = TeamSerializer(data=request.data)
         if serializer.is_valid():
-            team_pk = request.data.pop('pk')
-            team = Team.objects.get(pk=team_pk)
-            updated_team = serializer.update(team, request.data)
+            team = Team.objects.get(pk=request.data['pk'])
+            data = request.data.copy()
+            data["users"] = [UserProfile.objects.get(pk=pk) for pk in data.get("users", [])]
+            updated_team = serializer.update(team, data)
             serializer = TeamSerializer(updated_team)
             return Response(serializer.data, status=201)
         return Response(serializer.errors, status=400)
