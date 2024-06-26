@@ -7,6 +7,9 @@ class UserProfile(models.Model):
     email = models.EmailField(unique=True)
     team = models.ForeignKey('Team', on_delete=models.SET_NULL, null=True, related_name='users')
 
+    class Meta:
+        ordering = ['first_name', 'last_name', 'email']
+
     @property
     def full_name(self):
         return self.first_name + ' ' + self.last_name
@@ -16,7 +19,10 @@ class UserProfile(models.Model):
 
 
 class Team(models.Model):
-    name = models.CharField(max_length=100)
+    name = models.CharField(max_length=100, unique=True)
+
+    class Meta:
+        ordering = ['name']
 
     @property
     def users(self):
