@@ -1,69 +1,23 @@
-from django.shortcuts import get_object_or_404
-from drf_yasg.utils import swagger_auto_schema
+from rest_framework.decorators import action
 from rest_framework.response import Response
-from rest_framework.viewsets import ViewSet
+from rest_framework.viewsets import ModelViewSet
 
 from team_management.models import Team, UserProfile
 from team_management.serializers import UserSerializer, TeamSerializer
 
 
-class UserView(ViewSet):
+class UserView(ModelViewSet):
+    serializer_class = UserSerializer
+    queryset = UserProfile.objects.all()
 
-    def get(self, request, pk: int):
-        user = get_object_or_404(UserProfile, pk=pk)
-        serializer = UserSerializer(user)
+
+class TeamView(ModelViewSet):
+    serializer_class = TeamSerializer
+    queryset = Team.objects.all()
+
+    @action(detail=True, methods=['get'])
+    def get_users(self, request, pk=None):
+        team = self.get_object()
+        users = team.users.all()
+        serializer = UserSerializer(users, many=True)
         return Response(serializer.data)
-
-    @swagger_auto_schema(
-        request_body=UserSerializer,
-        responses={
-            201: UserSerializer,
-            400: 'Bad Request'
-        }
-    )
-    def create(self, request):
-        serializer = UserSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=201)
-        return Response(serializer.errors, status=400)
-
-
-class TeamView(ViewSet):
-
-    def get(self, request, pk: int):
-        team = get_object_or_404(Team, pk=pk)
-        serializer = TeamSerializer(team)
-        return Response(serializer.data)
-
-    @swagger_auto_schema(
-        request_body=TeamSerializer,
-        responses={
-            201: TeamSerializer,
-            400: 'Bad Request'
-        }
-    )
-    def create(self, request):
-        serializer = TeamSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=201)
-        return Response(serializer.errors, status=400)
-
-    @swagger_auto_schema(
-        request_body=TeamSerializer,
-        responses={
-            201: TeamSerializer,
-            400: 'Bad Request'
-        }
-    )
-    def put(self, request):
-        serializer = TeamSerializer(data=request.data)
-        if serializer.is_valid():
-            team = Team.objects.get(pk=request.data['pk'])
-            data = request.data.copy()
-            data["users"] = [UserProfile.objects.get(pk=pk) for pk in data.get("users", [])]
-            updated_team = serializer.update(team, data)
-            serializer = TeamSerializer(updated_team)
-            return Response(serializer.data, status=201)
-        return Response(serializer.errors, status=400)
