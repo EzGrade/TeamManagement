@@ -5,7 +5,7 @@ class UserProfile(models.Model):
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
     email = models.EmailField(unique=True)
-    team = models.ForeignKey('Team', on_delete=models.SET_NULL, null=True, related_name='users')
+    team = models.ForeignKey('Team', on_delete=models.SET_NULL, null=True, related_name='users', editable=False)
 
     class Meta:
         ordering = ['first_name', 'last_name', 'email']
