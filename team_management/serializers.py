@@ -11,4 +11,15 @@ class UserSerializer(serializers.ModelSerializer):
 class TeamSerializer(serializers.ModelSerializer):
     class Meta:
         model = Team
-        fields = ['id', 'name', 'users']
+        fields = [
+            'id',
+            'name',
+            'users'
+        ]
+
+
+class TeamUsersSerializer(serializers.Serializer):
+    users = UserSerializer(
+        many=True,
+        read_only=True
+    )

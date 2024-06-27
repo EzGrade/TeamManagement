@@ -2,13 +2,35 @@ from django.db import models
 
 
 class UserProfile(models.Model):
-    first_name = models.CharField(max_length=100)
-    last_name = models.CharField(max_length=100)
-    email = models.EmailField(unique=True)
-    team = models.ForeignKey('Team', on_delete=models.SET_NULL, null=True, related_name='users', editable=False)
+    first_name = models.CharField(
+        max_length=100,
+        verbose_name='First Name'
+    )
+    last_name = models.CharField(
+        max_length=100,
+        verbose_name='Last Name'
+    )
+    email = models.EmailField(
+        unique=True,
+        verbose_name='Email'
+    )
+    team = models.ForeignKey(
+        'Team',
+        on_delete=models.SET_NULL,
+        null=True,
+        related_name='users',
+        editable=False,
+        verbose_name='Team'
+    )
 
     class Meta:
-        ordering = ['first_name', 'last_name', 'email']
+        verbose_name = 'User Profile'
+        verbose_name_plural = 'User Profiles'
+        ordering = [
+            'first_name',
+            'last_name',
+            'email'
+        ]
 
     @property
     def full_name(self):
@@ -19,10 +41,18 @@ class UserProfile(models.Model):
 
 
 class Team(models.Model):
-    name = models.CharField(max_length=100, unique=True)
+    name = models.CharField(
+        max_length=100,
+        unique=True,
+        verbose_name='Team Name'
+    )
 
     class Meta:
-        ordering = ['name']
+        verbose_name = 'Team'
+        verbose_name_plural = 'Teams'
+        ordering = [
+            'name'
+        ]
 
     @property
     def users(self):

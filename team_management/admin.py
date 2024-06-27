@@ -6,7 +6,12 @@ from team_management.models import UserProfile, Team
 # Register your models here.
 @admin.register(UserProfile)
 class UserProfileAdmin(admin.ModelAdmin):
-    list_display = ['pk', 'full_name', 'email', 'team']
+    list_display = [
+        'pk',
+        'full_name',
+        'email',
+        'team'
+    ]
 
 
 class UserProfileInline(admin.TabularInline):
@@ -15,5 +20,10 @@ class UserProfileInline(admin.TabularInline):
 
 @admin.register(Team)
 class Team(admin.ModelAdmin):
-    list_display = ['pk', 'name']
-    inlines = [UserProfileInline]
+    list_display = [
+        'pk',
+        'name'
+    ]
+    inlines = [
+        UserProfileInline
+    ]

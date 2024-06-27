@@ -3,7 +3,11 @@ from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
 from team_management.models import Team, UserProfile
-from team_management.serializers import UserSerializer, TeamSerializer
+from team_management.serializers import (
+    UserSerializer,
+    TeamSerializer,
+    TeamUsersSerializer
+)
 
 
 class UserView(ModelViewSet):
@@ -17,7 +21,7 @@ class TeamView(ModelViewSet):
 
     @action(detail=True, methods=['get'])
     def get_users(self, request, pk=None):
-        team = self.get_object()
-        users = team.users.all()
-        serializer = UserSerializer(users, many=True)
-        return Response(serializer.data)
+        users = TeamUsersSerializer(
+            self.get_object()
+        )
+        return Response(users.data)
